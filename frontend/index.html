@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>File Sharing DApp</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+
+<body>
+  <h2>File Sharing DApp</h2>
+
+  <p id="walletAddress">Connected Wallet: Not connected</p>
+
+  <input type="file" id="fileInput"><br><br>
+
+  <label>Share with:</label>
+  <select id="recipientSelect">
+    <option value="">--Select Wallet--</option>
+  </select><br><br>
+
+  <button onclick="uploadFile()">Upload & Share</button>
+  <button onclick="getReceivedFiles()">Get Received Files</button>
+
+  <h3>Received Files</h3>
+  <ul id="receivedList"></ul>
+</body>
+
+</html>
