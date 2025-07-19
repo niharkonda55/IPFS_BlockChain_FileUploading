@@ -288,11 +288,7 @@ async function uploadFile() {
 
     // Clear the file input and refresh received files
     fileInput.value = '';
-    // getReceivedFiles(); // Refresh the list to show newly shared file if it's for current user
-    alert("File shared successfully! Please wait a moment while the blockchain confirms and the file appears in your list.");
-    setTimeout(() => {
-      getReceivedFiles();
-    }, 2000);
+    getReceivedFiles(); // Refresh the list to show newly shared file if it's for current user
 
   } catch (err) {
     console.error("Upload/share failed:", err);
