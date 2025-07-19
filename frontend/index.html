@@ -37,7 +37,6 @@
   <title>Decentralized File Share</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
-  <script defer src="app.js"></script>
   <style>
     :root {
       --primary-color: #4CAF50;
@@ -116,13 +115,6 @@
       box-sizing: border-box;
     }
 
-    input[type="file"] {
-      border: 1px dashed var(--border-color);
-      padding: 15px;
-      cursor: pointer;
-      text-align: center;
-    }
-
     input[type="file"]::file-selector-button {
       display: none;
     }
@@ -183,51 +175,100 @@
       margin-bottom: 10px;
       padding: 15px;
       display: flex;
-      /* Use flexbox for alignment of 'From' and link */
       flex-direction: column;
-      /* Stack items vertically */
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     #receivedList li .file-info {
       display: flex;
       flex-direction: column;
-      /* Stack 'From' and link vertically */
       gap: 5px;
-      /* Space between 'From' and link */
     }
 
     #receivedList li .file-info span {
       font-weight: 500;
       color: #555;
       margin-bottom: 5px;
-      /* Add some space below "From:" text */
     }
 
     #receivedList li .file-info a {
       color: var(--secondary-color);
       text-decoration: none;
       font-weight: 500;
-      /* --- IMPORTANT: New properties for link wrapping --- */
       word-wrap: break-word;
-      /* Breaks long words if necessary */
       overflow-wrap: break-word;
-      /* Modern equivalent for word-wrap */
       word-break: break-all;
-      /* Breaks the word at any character if it's too long */
       min-width: 0;
-      /* Ensures the item can shrink */
-      /* --- End of important new properties --- */
       flex-grow: 1;
       margin-right: 10px;
-      /* Keep some margin if other elements are added beside it */
     }
 
     #receivedList li a:hover {
       text-decoration: underline;
     }
 
-    /* Responsive adjustments */
+    /* NEW CSS for Flash Messages */
+    #flashMessageContainer {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      /* CHANGED FROM RIGHT */
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 350px;
+      pointer-events: none;
+    }
+
+    .flash-message {
+      padding: 15px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      color: #fff;
+      opacity: 0;
+      transform: translateX(-100%);
+      /* CHANGED: Starts off-screen to the left */
+      animation: slideIn 0.3s forwards, fadeOut 0.5s forwards var(--flash-duration, 4.5s);
+      pointer-events: auto;
+    }
+
+    .flash-message.success {
+      background-color: #4CAF50;
+    }
+
+    .flash-message.error {
+      background-color: #f44336;
+    }
+
+    .flash-message.info {
+      background-color: #2196F3;
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+        /* Ends on-screen */
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+        /* Starts on-screen */
+      }
+
+      to {
+        opacity: 0;
+        transform: translateX(-100%);
+        /* CHANGED: Slides off-screen to the left */
+      }
+    }
+
+    /* Responsive adjustments for flash messages */
     @media (max-width: 600px) {
       .container {
         padding: 20px;
@@ -242,11 +283,22 @@
       button:last-child {
         margin-bottom: 0;
       }
+
+      #flashMessageContainer {
+        top: 10px;
+        left: 10px;
+        /* Now sticks to left on small screens */
+        right: 10px;
+        /* Still needs right property to control width with left */
+        max-width: unset;
+      }
     }
   </style>
 </head>
 
 <body>
+  <div id="flashMessageContainer"></div>
+
   <div class="container">
     <h2><span style="color: var(--primary-color);">D</span>ecentralized <span
         style="color: var(--secondary-color);">F</span>ile <span style="color: var(--primary-color);">S</span>hare</h2>
@@ -273,6 +325,8 @@
       </ul>
     </div>
   </div>
+
+  <script src="app.js"></script>
 </body>
 
 </html>
