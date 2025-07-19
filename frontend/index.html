@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 
 <head>
@@ -24,6 +24,255 @@
 
   <h3>Received Files</h3>
   <ul id="receivedList"></ul>
+</body>
+
+</html> 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decentralized File Share</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+  <script defer src="app.js"></script>
+  <style>
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #607D8B;
+      --accent-color: #FFC107;
+      --background-color: #f4f7f6;
+      --card-background: #ffffff;
+      --text-color: #333;
+      --border-color: #ddd;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: var(--card-background);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 700px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    #walletAddress {
+      text-align: center;
+      margin-bottom: 25px;
+      padding: 10px;
+      background-color: #e8f5e9;
+      border-radius: 8px;
+      color: var(--primary-color);
+      font-weight: 500;
+      word-wrap: break-word;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background-color: #fcfcfc;
+    }
+
+    .section h3 {
+      color: var(--secondary-color);
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    input[type="file"],
+    select {
+      display: block;
+      width: calc(100% - 22px);
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    input[type="file"] {
+      border: 1px dashed var(--border-color);
+      padding: 15px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    input[type="file"]::file-selector-button {
+      display: none;
+    }
+
+    input[type="file"]::before {
+      content: 'Choose File';
+      display: inline-block;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-right: 10px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #43A047;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:last-child {
+      margin-right: 0;
+    }
+
+    #receivedList {
+      list-style: none;
+      padding: 0;
+    }
+
+    #receivedList li {
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      padding: 15px;
+      display: flex;
+      /* Use flexbox for alignment of 'From' and link */
+      flex-direction: column;
+      /* Stack items vertically */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    #receivedList li .file-info {
+      display: flex;
+      flex-direction: column;
+      /* Stack 'From' and link vertically */
+      gap: 5px;
+      /* Space between 'From' and link */
+    }
+
+    #receivedList li .file-info span {
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 5px;
+      /* Add some space below "From:" text */
+    }
+
+    #receivedList li .file-info a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 500;
+      /* --- IMPORTANT: New properties for link wrapping --- */
+      word-wrap: break-word;
+      /* Breaks long words if necessary */
+      overflow-wrap: break-word;
+      /* Modern equivalent for word-wrap */
+      word-break: break-all;
+      /* Breaks the word at any character if it's too long */
+      min-width: 0;
+      /* Ensures the item can shrink */
+      /* --- End of important new properties --- */
+      flex-grow: 1;
+      margin-right: 10px;
+      /* Keep some margin if other elements are added beside it */
+    }
+
+    #receivedList li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+
+      button:last-child {
+        margin-bottom: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2><span style="color: var(--primary-color);">D</span>ecentralized <span
+        style="color: var(--secondary-color);">F</span>ile <span style="color: var(--primary-color);">S</span>hare</h2>
+
+    <p id="walletAddress">Connected Wallet: <span style="font-weight: 500;">Not connected</span></p>
+
+    <div class="section">
+      <h3>Upload & Share File</h3>
+      <label for="fileInput">Select a file to upload:</label>
+      <input type="file" id="fileInput">
+
+      <label for="recipientSelect">Share with wallet:</label>
+      <select id="recipientSelect">
+        <option value="">-- Select Wallet --</option>
+      </select>
+      <button onclick="uploadFile()">Upload & Share</button>
+    </div>
+
+    <div class="section">
+      <h3>Your Received Files</h3>
+      <button onclick="getReceivedFiles()">Refresh Received Files</button>
+      <ul id="receivedList">
+        <li style="text-align: center; color: #777;">No files received yet.</li>
+      </ul>
+    </div>
+  </div>
 </body>
 
 </html>
